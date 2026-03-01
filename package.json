@@ -1,0 +1,37 @@
+{
+    "name": "extension-indexed-db",
+    "version": "0.1.0",
+    "description": "IndexedDB wrapper for Chrome extensions — typed queries, schema migrations, cursor pagination, and transaction batching for MV3.",
+    "author": "Zovo <hello@zovo.one>",
+    "license": "MIT",
+    "keywords": [
+        "chrome-extension",
+        "indexeddb",
+        "database",
+        "query",
+        "migration",
+        "schema",
+        "manifest-v3",
+        "browser-extension",
+        "storage"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/theluckystrike/extension-indexed-db.git"
+    },
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "files": [
+        "dist",
+        "README.md",
+        "LICENSE"
+    ],
+    "scripts": {
+        "build": "tsc",
+        "prepublishOnly": "npm run build"
+    },
+    "devDependencies": {
+        "@types/chrome": "^0.0.260",
+        "typescript": "^5.3.3"
+    }
+}
