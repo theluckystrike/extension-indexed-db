@@ -1,14 +1,95 @@
-# extension-indexed-db — IndexedDB Wrapper for Extensions
-> **Built by [Zovo](https://zovo.one)** | `npm i extension-indexed-db`
+# extension-indexed-db
 
-Schema definition, typed CRUD, index queries, cursor pagination, and batch operations. Replaces the 10MB storage.local limit.
+A simplified IndexedDB wrapper for Chrome extensions with Promise-based API.
 
-```typescript
-import { ExtensionDB } from 'extension-indexed-db';
-const db = new ExtensionDB('myapp', 1);
-db.defineStore('notes', 'id', [{ name: 'tag', keyPath: 'tag' }]);
-await db.open();
-await db.put('notes', { id: '1', text: 'Hello', tag: 'work' });
-const page = await db.paginate('notes', 0, 20);
+## Overview
+
+extension-indexed-db provides a clean, Promise-based API for working with IndexedDB in Chrome extensions. It simplifies the complex native IndexedDB API while maintaining full functionality.
+
+## Installation
+
+```bash
+npm install extension-indexed-db
 ```
-MIT License
+
+## Quick Start
+
+```javascript
+import { openDB } from 'extension-indexed-db';
+
+// Open or create database
+const db = await openDB('my-extension-db', 1, {
+  upgrade(db) {
+    // Create object store
+    if (!db.objectStoreNames.contains('settings')) {
+      db.createObjectStore('settings', { keyPath: 'id' });
+    }
+  },
+});
+
+// Save data
+await db.put('settings', { id: 'theme', value: 'dark' });
+
+// Get data
+const theme = await db.get('settings', 'theme');
+
+// Get all data
+const allSettings = await db.getAll('settings');
+
+// Delete data
+await db.delete('settings', 'theme');
+```
+
+## API
+
+### openDB(name, version, upgrade?)
+
+Opens or creates an IndexedDB database.
+
+| Param | Type | Description |
+|-------|------|-------------|
+| name | string | Database name |
+| version | number | Database version |
+| upgrade | function | Upgrade callback for schema changes |
+
+### db.put(store, value)
+
+Stores a value in an object store.
+
+### db.get(store, key)
+
+Retrieves a value by key.
+
+### db.getAll(store)
+
+Retrieves all values from an object store.
+
+### db.delete(store, key)
+
+Deletes a value by key.
+
+### db.clear(store)
+
+Clears all values in an object store.
+
+## Extension Manifest (MV3)
+
+Add to your `manifest.json`:
+
+```json
+{
+  "permissions": ["storage"]
+}
+```
+
+Note: IndexedDB doesn't require additional permissions in MV3.
+
+## Browser Support
+
+- Chrome 90+ (MV3)
+- Edge 90+
+- Firefox 90+
+
+## License
+
+MIT
